@@ -1,0 +1,191 @@
+sqsum([], 0).
+sqsum([First | Rest], Sum) :- sqsum(Rest, RestSum),
+                            Sum is RestSum + First * First.
+
+%alternate([],[],[]).
+
+%alternate(L1, [], L1).
+
+alternate([], L2, L2).
+
+alternate(L1, [], L1).
+
+
+%alternate(L1, [], L1), 5=5.
+
+
+alternate([],[],[]).
+
+alternate([First1 | Rest1], [First2|Rest2], L) :- 
+    alternate(Rest1, Rest2, NewL),
+    L = [First1|[First2|NewL]].
+ 
+
+
+
+   
+%alternate([First1 | Rest1], [First2|Rest2], L) :- 
+%    alternate(Rest1, Rest2, NewL),
+%    L = [First1|[First2|NewL]].
+    
+
+
+%alternate([], []).
+
+
+%alternate([First1 | Rest1], L) :- 
+%    alternate(Rest1, NewL),
+    
+%    L = [First1|NewL].
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    %alternate(Rest, Rest2, L).
+    
+    %L = [First, L].
+
+
+
+
+
+
+/**
+
+counti([First | _], N) :- is_list(First),
+    counti(First, N),
+    write("!efe").
+
+*/
+
+
+counti([], 0).
+
+counti([First|Rest], N):- 
+    counti(Rest, N1), N is N1 + 1, integer(First).
+
+
+counti([First|Rest], N):- 
+    counti(Rest, N1), N is N1, atom(First).
+
+
+counti([First|Rest], N):- 
+    counti(Rest, N1), N is N1, float(First).
+
+
+
+counti([First|Rest], N):- 
+    counti(Rest, N1), counti(First, N2), N is N1 + N2, is_list(First). 
+    
+
+
+
+
+  
+
+
+
+
+
+%umem([],[]).
+
+
+umem(X, L):-
+    distinct(member(X, L)).
+
+
+
+    
+    
+
+
+
+
+/**
+required(Z,Y):-
+    prerequisite(X,Z), prerequisite(Y,X).
+*/
+
+required(Z,Y):-
+    prerequisite(X,Z), required(X,Y).
+
+
+required(X, Y):-
+   prerequisite(Y, X).
+
+
+/**
+required(X,Y):-
+    prerequisite(Z, X),
+    required(Z, Y).
+
+*/
+/**
+required(X,Y):-
+    prerequisite(X, Z),
+    required(Z, Y).
+
+*/
+
+t(C, L):-
+    findall(Z, course(Z), L2),
+    findall(X, required(C, X), L1),
+
+    intersection(L2, L1, L).
+
+    
+
+    %findall(Z, course(Z) L2)
+
+
+
+
+
+
+%preq_list(L, C):-
+ %   findall(G, course(G), L2),
+    
+  %  findall(course(Z), t(Z, C), L1),
+   % subtract(L1, L2, L).
+
+
+
+preq_list(L, C):-
+    %findall(Z, course(Z), L).
+    
+    course(Z), t(Z, C), L = Z.
+
+
+not_member(_, []).
+
+not_member(X, [Y|L]):-
+    X \== Y, not_member(X, L).
+
+
+
+can_take(L,C):-
+    preq_list(X, Y), C = X, subset(Y,L), not_member(C, L).
+
+
+
+
+%can_take(L,D):-
+%    subtract((preq_list(X, Y), C = X, subset(Y,L)),  L, D).
+
+
+rm_taken(L, C):-
+    findall(G, can_take(C,G), L).

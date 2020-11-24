@@ -1,0 +1,112 @@
+(defun meh (L)
+  (if (null (cdr L))
+      t
+    (if (< (car L) (cadr L))
+	(meh (cdr L)))))
+
+(defun myreverse (L)
+  (if (null L)
+      '()
+    (append (myreverse(cdr L))(cons(car L) nil))))
+
+(defun palindrone (L)
+  (equal L (myreverse L)))
+
+(defun buildnlist (N)
+  (if (eq N 0)
+      '()
+    (cons N (buildnlist (- N 1)))))
+
+(defun numbers (N)
+  (myreverse (buildnlist N)))
+
+(defun common (L1 L2)
+  (cond ((Null L1)
+      0)
+      ((Null (cdr L1))
+      (if (not (null(member (car L1) L2)))
+	  1
+	0))
+	
+      (T ( + (common (cdr L1) L2) (if (not (null(member (car L1) L2)))
+				      1
+				    0)))))	
+
+
+(defun replaceletter (atom1 atom2 Letter)
+  (if (eq atom1 Letter)
+      atom2 
+    Letter))
+
+(defun replace1 (atom1 atom2 List)
+  (if (null List)
+    List
+    (cons(replaceletter atom1 atom2 (car List)) (replace1 atom1 atom2(cdr List)))))
+
+
+(defun replaceletter2 (atom1 atom2 Letter)
+  (if (not(atom Letter))
+      (replace2 atom1 atom2 Letter)
+    (if (eq atom1 Letter)
+	atom2 
+      Letter)))
+
+
+
+(defun replace2 (atom1 atom2 List)
+  (if (null List)
+    List
+    (cons(replaceletter2 atom1 atom2 (car List)) (replace2 atom1 atom2(cdr List)))))
+
+
+
+
+(defun callcommon (listlists keylist)
+  (cond ((null listlists)
+	 "no list given to compare to.")
+	 ((null (cdr listlists))
+	  (list(common (car listlists) keylist)))
+	  (T (cons(common (car listlists) keylist) (callcommon (cdr listlists) keylist)))
+)
+)	
+
+
+(defun myremove (element completelist outputlist)
+  (if (null completelist)
+      outputlist
+    (if (equal element (car completelist))
+	(append outputlist (cdr completelist))
+      (myremove element (cdr completelist) (append outputlist (list(car completelist)))))))
+
+
+
+(defun setdiff (removelist outputlist)
+  (if (null removelist)
+      outputlist
+    (setdiff (cdr removelist) (myremove (car removelist) outputlist nil))))
+	
+
+
+(defun mymax (L maxval)
+  (if (null L)
+      maxval
+    (if (> (car L) maxval)
+	(mymax (cdr L) (car L))
+      (mymax (cdr L) maxval))))
+
+
+
+(defun select_best (S N maxnum)
+  (if (= maxnum (common (car S) N))
+      (car S)
+    (select_best (cdr S) N maxnum)))
+
+
+
+(defun mymain (S N outputlist)
+  (if (null N)
+      outputlist
+    (mymain (setdiff (list(select_best S N (mymax (callcommon S N) 0))) S) (setdiff (select_best S N (mymax (callcommon S N) 0)) N) (append outputlist (list(select_best S N (mymax (callcommon S N) 0)))))))
+    
+
+    
